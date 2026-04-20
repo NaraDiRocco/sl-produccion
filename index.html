@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe Semanal — Departamento de Producción</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Login ── */
+    #login-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--negro);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-box {
+      background: var(--blanco);
+      width: 100%;
+      max-width: 380px;
+      padding: 44px 36px 36px;
+    }
+
+    .login-logo {
+      display: block;
+      max-height: 52px;
+      margin: 0 auto 28px;
+      filter: brightness(0);
+    }
+
+    .login-titulo {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris-lt);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-campo {
+      margin-bottom: 14px;
+    }
+
+    .login-campo label {
+      display: block;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gris-lt);
+      margin-bottom: 6px;
+    }
+
+    .login-campo input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--borde);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      color: var(--negro);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .login-campo input:focus { border-color: var(--dorado); }
+
+    .login-error {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      color: #c0392b;
+      text-align: center;
+      margin-bottom: 12px;
+      min-height: 20px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--negro);
+      color: var(--blanco);
+      border: none;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.15s;
+    }
+
+    .login-btn:hover { opacity: 0.85; }
+
+    :root {
+      --negro:   #1a1a1a;
+      --gris:    #4a4a4a;
+      --gris-lt: #9a9a9a;
+      --crema:   #f5f0ea;
+      --blanco:  #ffffff;
+      --dorado:  #c4956a;
+      --borde:   #e8e0d6;
+      --sombra:  rgba(0,0,0,0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--crema);
+      color: var(--negro);
+      min-height: 100vh;
+    }
+
+    /* ── Header / Hero ── */
+    header {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      color: var(--blanco);
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.45) 0%,
+        rgba(0,0,0,0.62) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      padding: 52px 24px 44px;
+      z-index: 1;
+    }
+
+    .header-logo {
+      max-height: 70px;
+      margin-bottom: 24px;
+      filter: brightness(0) invert(1);
+    }
+
+    header h1 {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.08em;
+      margin-top: 8px;
+    }
+
+    .header-linea {
+      width: 48px;
+      height: 1px;
+      background: var(--dorado);
+      margin: 20px auto;
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 60px 20px 80px;
+    }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: var(--borde);
+    }
+
+    /* ── Semana ── */
+    .semana {
+      display: flex;
+      gap: 28px;
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    .semana-punto {
+      flex-shrink: 0;
+      width: 56px;
+      display: flex;
+      justify-content: center;
+      padding-top: 10px;
+    }
+
+    .semana-circulo {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--dorado);
+      border: 3px solid var(--crema);
+      outline: 1px solid var(--dorado);
+      flex-shrink: 0;
+    }
+
+    .semana-contenido {
+      flex: 1;
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 2px;
+      box-shadow: 0 2px 14px var(--sombra);
+      overflow: hidden;
+    }
+
+    /* ── Cabecera de semana ── */
+    .semana-header {
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid var(--borde);
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .semana-badge {
+      font-size: 0.68rem;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blanco);
+      background: var(--negro);
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+
+    .semana-fecha {
+      font-size: 0.82rem;
+      font-family: 'Arial', sans-serif;
+      color: var(--gris-lt);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Temas ── */
+    .temas-lista { padding: 0; }
+
+    .tema {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--borde);
+    }
+
+    .tema:last-of-type { border-bottom: none; }
+
+    .tema-titulo {
+      font-size: 0.7rem;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dorado);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tema-titulo::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--borde);
+    }
+
+    /* ── Items ── */
+    .items-lista {
+      list-style: none;
+      margin-bottom: 0;
+    }
+
+    .items-lista li {
+      font-size: 0.9rem;
+      font-family: 'Arial', sans-serif;
+      color: var(--gris);
+      padding: 7px 0 7px 18px;
+      border-bottom: 1px solid var(--borde);
+      position: relative;
+      line-height: 1.55;
+    }
+
+    .items-lista li:last-child { border-bottom: none; }
+
+    .items-lista li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 5px;
+      background: var(--dorado);
+    }
+
+    /* ── Galería ── */
+    .tema-galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .galeria-img {
+      aspect-ratio: 1;
+      object-fit: cover;
+      width: 100%;
+      cursor: pointer;
+      display: block;
+      transition: opacity 0.2s;
+    }
+
+    .galeria-img:hover { opacity: 0.85; }
+
+    /* ── Objetivo próxima reunión ── */
+    .objetivo {
+      background: var(--negro);
+      padding: 20px 28px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .objetivo-icono {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--dorado);
+    }
+
+    .objetivo-body {}
+
+    .objetivo-label {
+      font-size: 0.65rem;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dorado);
+      margin-bottom: 6px;
+    }
+
+    .objetivo-texto {
+      font-size: 0.88rem;
+      font-family: 'Arial', sans-serif;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.65;
+    }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.93);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .lightbox.activo { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+    }
+
+    .lightbox-cerrar {
+      position: absolute;
+      top: 20px; right: 28px;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-weight: 300;
+      line-height: 1;
+      background: none;
+      border: none;
+    }
+
+    /* ── Sin datos ── */
+    .sin-datos {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--gris-lt);
+      font-family: 'Arial', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--negro);
+      color: var(--gris-lt);
+      text-align: center;
+      padding: 24px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 540px) {
+      .semana { gap: 16px; }
+      .timeline::before { left: 20px; }
+      .semana-punto { width: 40px; }
+      .semana-header,
+      .tema,
+      .objetivo { padding-left: 18px; padding-right: 18px; }
+      .tema-galeria { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login -->
+  <div id="login-overlay">
+    <div class="login-box">
+      <img
+        class="login-logo"
+        src="https://acdn-us.mitiendanube.com/stores/100/616/themes/common/logo-161367794-1725212659-44a379e58c9f6300e97048a9cda092d21725212659.png"
+        alt="Silvina Ledesma"
+        onerror="this.style.display='none'"
+      />
+      <div class="login-titulo">Departamento de Producción</div>
+      <div class="login-campo">
+        <label>Usuario</label>
+        <input type="email" id="login-user" placeholder="usuario@ejemplo.com" autocomplete="username" />
+      </div>
+      <div class="login-campo">
+        <label>Contraseña</label>
+        <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="login-btn" onclick="intentarLogin()">Ingresar</button>
+    </div>
+  </div>
+
+  <header>
+    <img
+      class="hero-img"
+      src="Gemini_Generated_Image_2590tm2590tm2590.png"
+      alt=""
+    />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <img
+        class="header-logo"
+        src="https://acdn-us.mitiendanube.com/stores/100/616/themes/common/logo-161367794-1725212659-44a379e58c9f6300e97048a9cda092d21725212659.png"
+        alt="Silvina Ledesma"
+        onerror="this.style.display='none'"
+      />
+      <h1>Informe Semanal</h1>
+      <div class="header-linea"></div>
+      <p>Departamento de Producción</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="timeline" id="timeline">
+      <div class="sin-datos">Cargando semanas...</div>
+    </div>
+  </main>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-cerrar" onclick="cerrarLightbox()">×</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <footer>
+    Silvina Ledesma — Departamento de Producción
+  </footer>
+
+  <script>
+    async function cargarDatos() {
+      try {
+        const res = await fetch('data.json?' + Date.now());
+        const data = await res.json();
+        renderTimeline(data.semanas || []);
+      } catch (e) {
+        document.getElementById('timeline').innerHTML =
+          '<div class="sin-datos">No se pudo cargar la información.</div>';
+      }
+    }
+
+    function renderTema(tema, semanaNum, temaIdx) {
+      const items = (tema.items || []).map(i => `<li>${i}</li>`).join('');
+      const fotos = (tema.imagenes || []).map(img => {
+        const src = `imagenes/${img}`;
+        return `<img class="galeria-img" src="${src}" alt="" onclick="abrirLightbox('${src}')" onerror="this.style.display='none'" />`;
+      }).join('');
+
+      return `
+        <div class="tema">
+          <div class="tema-titulo">${tema.titulo}</div>
+          ${items ? `<ul class="items-lista">${items}</ul>` : ''}
+          ${fotos ? `<div class="tema-galeria">${fotos}</div>` : ''}
+        </div>
+      `;
+    }
+
+    function renderTimeline(semanas) {
+      const tl = document.getElementById('timeline');
+
+      if (!semanas.length) {
+        tl.innerHTML = '<div class="sin-datos">Todavía no hay semanas cargadas.</div>';
+        return;
+      }
+
+      tl.innerHTML = [...semanas].reverse().map(s => `
+        <article class="semana">
+          <div class="semana-punto">
+            <div class="semana-circulo"></div>
+          </div>
+          <div class="semana-contenido">
+
+            <div class="semana-header">
+              <span class="semana-badge">Semana ${s.numero}</span>
+              <span class="semana-fecha">${s.fecha}</span>
+            </div>
+
+            <div class="temas-lista">
+              ${(s.temas || []).map((t, i) => renderTema(t, s.numero, i)).join('')}
+            </div>
+
+            ${s.objetivo_proxima ? `
+              <div class="objetivo">
+                <div class="objetivo-icono">→</div>
+                <div class="objetivo-body">
+                  <div class="objetivo-label">Objetivo próxima reunión</div>
+                  <div class="objetivo-texto">${s.objetivo_proxima}</div>
+                </div>
+              </div>
+            ` : ''}
+
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function abrirLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('activo');
+    }
+
+    function cerrarLightbox() {
+      document.getElementById('lightbox').classList.remove('activo');
+      document.getElementById('lightbox-img').src = '';
+    }
+
+    document.getElementById('lightbox').addEventListener('click', e => {
+      if (e.target === e.currentTarget) cerrarLightbox();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') cerrarLightbox();
+    });
+
+    /* ── Login ── */
+    const HASH_USER = 'e78a0c1135156be272bacf467cb7d5acd6bfe70010f417980891b64d735a9ddd';
+    const HASH_PASS = '401f628865dcb66c2e3178a2057eee0b8a1ed44526815c30b88066026bedac3b';
+
+    async function sha256(texto) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    async function intentarLogin() {
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      const [hu, hp] = await Promise.all([sha256(user), sha256(pass)]);
+      if (hu === HASH_USER && hp === HASH_PASS) {
+        sessionStorage.setItem('sl-auth', '1');
+        document.getElementById('login-overlay').style.display = 'none';
+      } else {
+        document.getElementById('login-error').textContent = 'Usuario o contraseña incorrectos.';
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && document.getElementById('login-overlay').style.display !== 'none') {
+        intentarLogin();
+      }
+    });
+
+    if (sessionStorage.getItem('sl-auth') === '1') {
+      document.getElementById('login-overlay').style.display = 'none';
+    }
+
+    cargarDatos();
+  </script>
+</body>
+</html>
