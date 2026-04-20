@@ -1,0 +1,80 @@
+{
+  "semanas": [
+    {
+      "numero": 1,
+      "fecha": "REUNION INICIAL",
+      "temas": [
+        {
+          "titulo": "Inicio de documentación + estructura de trabajo",
+          "items": [
+            "Inicio de capturas de dashboard",
+            "Reuniones semanales entre el departamento de producción y Belen",
+            "Mejora continua primero sobre las funciones actuales y luego sobre las nuevas"
+          ],
+          "imagenes": []
+        }
+      ],
+      "objetivo_proxima": "Empezar a sacar screen cada lunes a primera hora para su posterior analisis ademas de colocar los trabajos de codigo a realizar. Cada semana tiene que tener un inicio y final de activades y en paralelo trabajar los trabajos a largo plazo."
+    },
+    {
+      "numero": 2,
+      "fecha": "13 al 19 de abril de 2026",
+      "temas": [
+        {
+          "titulo": "Inicio de capturas",
+          "items": [
+            "Capturas a primera hora del lunes 13 de abril. Capture todos los meses"
+          ],
+          "imagenes": [
+            "semana2/9230B985-9066-4809-BAE4-DE802D6A7451_1_105_c.jpeg",
+            "semana2/DC022B38-5435-4438-B694-6340C9F8EA45.png",
+            "semana2/E628CB5E-92AD-4648-9ECE-ED58E74B92F6.png",
+            "semana2/1CFCBB2B-AFC4-4968-837E-50A0AA8B4D50.png",
+            "semana2/FA2C30B0-64EF-4071-9950-28FFDA0323E2.png",
+            "semana2/C231C8F3-3B98-4887-B55F-788578E4167B.png"
+          ]
+        },
+        {
+          "titulo": "Reunion semanal con el equipo",
+          "items": [
+            "Luego de un analisis de las capturas del dia lunes se llego a varias mejoras del sistema como de la forma de trabajar, son las siguientes:",
+            "Detección de \"mini ordenes\" dentro de ordenes antiguas, esto provocaba cambio de informacion constante en meses pasados - Se acordo siempre hacer una nueva orden mas alla de que el precio no cambiara.",
+            "Informacion inconsistente por ordenes nunca producidas, se acordo trabajar en el codigo para agregar un estado cancelado y arreglos en consecuencia a esa decision.",
+            "Mejorar vista de ordenes de produccion para que sea mas visual, mejorando colores y sacando columnas no necesarias"
+          ],
+          "imagenes": []
+        }
+      ],
+      "objetivo_proxima": "El equipo debera pasar aquellas ordenes que estan en el limbo a canceladas ademas de utilizar siempre una nueva orden de produccion para cada periodo. Se hablo de una vista de avisos (falta programar) para que tenga similud con el google sheets que manejan el taller"
+    },
+    {
+      "numero": 3,
+      "fecha": "20 al 26 de abril de 2026",
+      "temas": [
+        {
+          "titulo": "Inicio de capturas",
+          "items": [
+            "Capturas a primera hora del lunes 20 de abril. Capture todos los meses"
+          ],
+          "imagenes": [
+            "semana3/261D27A7-410D-44BC-AE8A-AA5FDCFEA24B_1_105_c.jpeg",
+            "semana3/F4F0C438-E008-4808-B8B7-7AB9E00A886C_1_105_c.jpeg",
+            "semana3/1ACA3863-0562-4A05-A393-C5DF2D635FE6_1_105_c.jpeg",
+            "semana3/B99D4FDB-3B81-4313-9131-446FF61BBF36.png",
+            "semana3/79C1F3F7-704E-448F-B1AD-051222BF48AF_1_105_c.jpeg"
+          ]
+        },
+        {
+          "titulo": "Mejoras ya presentadas",
+          "items": [
+            "Mejoras pedidas de la semana 2 (detalle en la misma)"
+          ],
+          "imagenes": [
+            "semana3/Captura de pantalla 2026-04-20 a la(s) 12.24.31.png",
+            "semana3/Captura de pantalla 2026-04-20 a la(s) 12.24.46.png"
+          ]
+        }
+      ]
+    }
+  ]
+}
