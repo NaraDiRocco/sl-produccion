@@ -324,9 +324,11 @@
     .tema-galeria {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 6px;
+      gap: 8px;
       margin-top: 16px;
     }
+
+    .galeria-celda { display: flex; flex-direction: column; gap: 5px; }
 
     .galeria-img {
       aspect-ratio: 1;
@@ -338,6 +340,35 @@
     }
 
     .galeria-img:hover { opacity: 0.85; }
+
+    .foto-comentario {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.85rem;
+      color: var(--gris);
+      line-height: 1.65;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--borde);
+      font-style: italic;
+    }
+
+    /* ── Lightbox caption ── */
+    .lightbox-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      color: rgba(255,255,255,0.85);
+      padding: 6px 18px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      max-width: 80vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     /* ── Objetivo próxima reunión ── */
     .objetivo {
@@ -493,6 +524,7 @@
   <div class="lightbox" id="lightbox">
     <button class="lightbox-cerrar" onclick="cerrarLightbox()">×</button>
     <img id="lightbox-img" src="" alt="" />
+    <div class="lightbox-caption" id="lightbox-caption" style="display:none"></div>
   </div>
 
   <footer>
@@ -511,11 +543,17 @@
       }
     }
 
-    function renderTema(tema, semanaNum, temaIdx) {
+    function renderTema(tema) {
       const items = (tema.items || []).map(i => `<li>${i}</li>`).join('');
       const fotos = (tema.imagenes || []).map(img => {
-        const src = `imagenes/${img}`;
-        return `<img class="galeria-img" src="${src}" alt="" onclick="abrirLightbox('${src}')" onerror="this.style.display='none'" />`;
+        const ruta = typeof img === 'string' ? img : img.ruta;
+        const src  = `imagenes/${ruta}`;
+        return `
+          <div class="galeria-celda">
+            <img class="galeria-img" src="${src}" alt=""
+              onclick="abrirLightbox('${src}','')"
+              onerror="this.closest('.galeria-celda').style.display='none'" />
+          </div>`;
       }).join('');
 
       return `
@@ -523,6 +561,7 @@
           <div class="tema-titulo">${tema.titulo}</div>
           ${items ? `<ul class="items-lista">${items}</ul>` : ''}
           ${fotos ? `<div class="tema-galeria">${fotos}</div>` : ''}
+          ${tema.foto_comentario ? `<p class="foto-comentario">${tema.foto_comentario}</p>` : ''}
         </div>
       `;
     }
@@ -566,14 +605,18 @@
       `).join('');
     }
 
-    function abrirLightbox(src) {
+    function abrirLightbox(src, caption) {
       document.getElementById('lightbox-img').src = src;
+      const cap = document.getElementById('lightbox-caption');
+      if (caption) { cap.textContent = caption; cap.style.display = 'block'; }
+      else { cap.style.display = 'none'; }
       document.getElementById('lightbox').classList.add('activo');
     }
 
     function cerrarLightbox() {
       document.getElementById('lightbox').classList.remove('activo');
       document.getElementById('lightbox-img').src = '';
+      document.getElementById('lightbox-caption').style.display = 'none';
     }
 
     document.getElementById('lightbox').addEventListener('click', e => {
